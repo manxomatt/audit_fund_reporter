@@ -1,0 +1,14 @@
+instrument_id,instrument_name,asset_class,issuer_name,issuer_type,parent_issuer,credit_rating,downgraded_from,market_value_sgd,modified_duration
+SGS-01,SGS 2.5% 2030,Singapore Government Securities,Singapore Government,government,,AAA,,20000000,5.0
+SGS-02,SGS 3.0% 2034,Singapore Government Securities,Singapore Government,government,,AAA,,15000000,5.0
+MAS-01,MAS Bill 12W,MAS Bills,Monetary Authority of Singapore,government,,AAA,,8000000,0.3
+COR-01,Changi Logistics 3.2% 2029,Investment Grade Corporate Bonds,Changi Logistics Pte Ltd,corporate,,BBB+,,8000000,4.5
+COR-02,Lion City Bank 3.5% 2031,Investment Grade Corporate Bonds,Lion City Bank,corporate,,A-,,6000000,4.5
+COR-03,Redhill Power 3.1% 2030,Investment Grade Corporate Bonds,Redhill Power Pte Ltd,GRE,Redhill Holdings,A,,7000000,4.5
+COR-04,Redhill Transport 3.0% 2032,Investment Grade Corporate Bonds,Redhill Transport Pte Ltd,GRE,Redhill Holdings,A,,6000000,4.5
+COR-05,Marina Bay Resorts 4.0% 2028,Investment Grade Corporate Bonds,Marina Bay Resorts Ltd,corporate,,BB,BBB-,6000000,4.5
+HY-01,APAC Yield 5.5% 2027,High Yield Bonds,Garuda Energy Tbk,corporate,,BB,,5000000,3.0
+HY-02,APAC Yield 6.0% 2026,High Yield Bonds,Siam Petro PCL,corporate,,BB-,,4000000,3.0
+FX-01,USD IG Bond (hedged) 3.8% 2030,Foreign Currency Bonds,Pacific Telecom Corp,corporate,,BBB,,5000000,4.0
+SC-01,AAA ABS Series 2024-1,Structured Credit,Harbour ABS Trust,spv,,AAA,,6000000,2.5
+CASH-01,SGD Cash,Cash & Cash Equivalents,House Cash,cash,,,,4000000,0.0

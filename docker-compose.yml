@@ -1,0 +1,9 @@
+services:
+  reporter:
+    build: .
+    # ANTHROPIC_API_KEY is optional; the system runs fully offline without it.
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    volumes:
+      - ./output:/app/output
+    command: ["python", "run.py", "--both"]

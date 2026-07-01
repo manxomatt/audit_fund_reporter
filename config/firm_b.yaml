@@ -1,0 +1,22 @@
+# firm_b.yaml -- Firm B, same fund and holdings, three house conventions.
+# Reproduced BY CONFIGURATION ONLY: the engine code is byte-identical to the
+# Firm A run. (Constraint 5.) Each override maps 1:1 to firm_B_brief.md.
+extends: base_methods.yaml
+firm: Firm B
+
+overrides:
+  # Convention 1: aggregate non-IG includes fallen angels (holdings rated
+  # below IG even when their asset class is Investment Grade Corporate Bonds).
+  aggregate_non_ig:
+    params:
+      include_below_ig_holdings: true
+
+  # Convention 2: GRE concentration measured at the parent issuer -- issuers
+  # sharing a parent are aggregated into one group before testing the 12% cap.
+  gre_issuer:
+    params:
+      group_by: parent_issuer
+
+# Convention 3: utilisation reported in truncated basis points (58.333% -> 5833 bps).
+global:
+  utilization_format: truncated_bps

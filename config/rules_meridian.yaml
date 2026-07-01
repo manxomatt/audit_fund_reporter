@@ -1,0 +1,143 @@
+# rules_meridian.yaml
+# =============================================================================
+# VERIFIED RULE EXTRACTION  --  Meridian Fixed Income Fund
+# =============================================================================
+# This file is the artefact produced by the *human extraction gate* described in
+# docs/01_flow_and_audit_events.md. In production an LLM/regex pass proposes
+# these rows from sample_fund_guidelines.pdf; a human reviews and signs off;
+# the signed-off result is THIS file.
+#
+# It is data, not engine logic. Each rule states:
+#   - the limit value(s)  (the number an examiner will challenge)
+#   - an `anchor`: a distinctive fragment of the exact source sentence. At
+#     ingest time engine/provenance.py searches the parsed PDF for this anchor
+#     and binds the rule node to the real chunk_id/page it was found on. If the
+#     anchor is absent, ingestion FAILS -- a tampered value or hallucinated rule
+#     cannot pass silently.
+#
+# Limits are % of NAV unless noted. Rating scale is S&P style.
+
+source_doc: sample_fund_guidelines.pdf
+extraction_confidence: 1.0   # post-human-review; recorded on every graph node
+
+# --- Allocation limits (Section 2) ------------------------------------------
+asset_class_limits:
+  - asset_class: Singapore Government Securities
+    min_pct: 20.0
+    max_pct: 60.0
+    page: 1
+    anchor: "Singapore Government Securities (SGS) 20% 60%"
+  - asset_class: MAS Bills
+    min_pct: 0.0
+    max_pct: 40.0
+    page: 1
+    anchor: "MAS Bills 0% 40%"
+  - asset_class: Investment Grade Corporate Bonds
+    min_pct: 10.0
+    max_pct: 50.0
+    page: 1
+    anchor: "Investment Grade Corporate Bonds 10% 50%"
+  - asset_class: High Yield Bonds
+    min_pct: 0.0
+    max_pct: 15.0
+    page: 1
+    anchor: "High Yield Bonds 0% 15%"
+  - asset_class: Foreign Currency Bonds
+    display_name: Foreign Currency Bonds (hedged)
+    min_pct: 0.0
+    max_pct: 20.0
+    page: 2
+    anchor: "Foreign Currency Bonds (hedged) 0% 20%"
+  - asset_class: Structured Credit
+    display_name: Structured Credit (ABS/MBS)
+    min_pct: 0.0
+    max_pct: 10.0
+    page: 2
+    anchor: "Structured Credit (ABS/MBS) 0% 10%"
+  - asset_class: Cash & Cash Equivalents
+    min_pct: 5.0
+    max_pct: 25.0
+    page: 2
+    anchor: "Cash Equivalents 5% 25%"
+
+# --- Aggregate / concentration / liquidity caps -----------------------------
+aggregate_caps:
+  non_ig_aggregate:
+    max_pct: 20.0
+    page: 2
+    anchor: "non-investment-grade instruments (High Yield + Structured Credit) must not exceed"
+  single_issuer:
+    max_pct: 8.0
+    page: 2
+    anchor: "No single issuer (excluding Singapore Government) may represent more"
+  gre_issuer:
+    max_pct: 12.0
+    page: 2
+    anchor: "Government-related entities (GREs) are capped at 12% per issuer"
+  liquidity_floor:
+    min_pct: 25.0
+    page: 2
+    anchor: "Liquid assets (SGS + MAS Bills + Cash) must constitute a minimum of 25% of NAV"
+
+# --- Market-risk limits (Section 3.1) ---------------------------------------
+risk_limits:
+  modified_duration:
+    min_years: 2.0
+    max_years: 6.5
+    page: 2
+    anchor: "Modified Duration 2.0"
+    breach_action: "PM notification within 1h"
+    owner: Portfolio Manager
+  dv01:
+    max_sgd_per_bp: 85000.0
+    page: 2
+    anchor: "SGD 85,000 per bp"
+    breach_action: "Risk Committee alert"
+    owner: Risk Committee
+
+# --- General breach owner for allocation / cap / floor limits (Section 2 & 5.2)
+# Any allocation-limit breach is reported to the Risk & Compliance Committee.
+general_breach:
+  owner: Risk & Compliance Committee
+  action: "report within 24 hours; remedy within 5 business days"
+  page: 2
+  anchor: "reported to the Risk & Compliance Committee within 24 hours"
+
+# --- Retention policy (Section 5.1) -- ingested into the graph ---------------
+retention_policies:
+  - klass: transaction_data
+    min_years: 7
+    page: 3
+    anchor: "minimum of 7 years for transaction data"
+  - klass: investor_facing_reports
+    min_years: 10
+    page: 3
+    anchor: "10 years for investor-facing"
+
+# --- Rating scale: higher rank = better credit. IG threshold = BBB-. ---------
+# A holding is "below investment grade" (a fallen-angel candidate) iff its
+# rating rank is strictly worse than BBB-.
+rating_scale:
+  AAA: 22
+  AA+: 21
+  AA: 20
+  AA-: 19
+  A+: 18
+  A: 17
+  A-: 16
+  BBB+: 15
+  BBB: 14
+  BBB-: 13
+  BB+: 12
+  BB: 11
+  BB-: 10
+  B+: 9
+  B: 8
+  B-: 7
+  CCC+: 6
+  CCC: 5
+  CCC-: 4
+  CC: 3
+  C: 2
+  D: 1
+investment_grade_floor: BBB-

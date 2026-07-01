@@ -1,0 +1,5 @@
+# firm_a.yaml -- Firm A reproduces the default guidelines reading exactly.
+# It extends the shared base with NO method overrides. (Constraint 4 baseline.)
+extends: base_methods.yaml
+firm: Firm A
+overrides: {}

@@ -1,0 +1,62 @@
+# base_methods.yaml
+# =============================================================================
+# Shared method configuration (the default "guidelines reading").
+# Both firms `extends:` this file. A firm expresses its house conventions purely
+# as `overrides` and `global` tweaks on top -- never by editing engine code.
+#
+# Each figure entry binds a report row (or group of rows) to a method in
+# engine/methods.py REGISTRY plus the parameters that method reads.
+# =============================================================================
+
+global:
+  utilization_format: percent_1dp   # percent_1dp | truncated_bps
+
+figures:
+  - id: allocation
+    method: allocations
+    params:
+      # Cash is governed by its MIN floor (the guidelines' "Minimum liquidity
+      # floor"); all other classes are governed by their MAX. This is a fund
+      # rule, identical for both firms.
+      binding:
+        Cash & Cash Equivalents: min
+
+  - id: aggregate_non_ig
+    method: aggregate_exposure
+    params:
+      include_below_ig_holdings: false   # Firm B flips this to true
+
+  - id: single_corporate_issuer
+    method: max_issuer_concentration
+    params:
+      issuer_types: [corporate]
+      group_by: issuer
+      cap: single_issuer
+      figure_id: single_corporate_issuer
+      label: Largest single corporate issuer
+
+  - id: gre_issuer
+    method: max_issuer_concentration
+    params:
+      issuer_types: [GRE]
+      group_by: issuer            # Firm B switches to parent_issuer
+      cap: gre_issuer
+      figure_id: gre_issuer
+      label: Largest GRE issuer
+
+  - id: liquidity_ratio
+    method: liquid_assets_ratio
+    params:
+      liquid_asset_classes:
+        - Singapore Government Securities
+        - MAS Bills
+        - Cash & Cash Equivalents
+
+  - id: modified_duration
+    method: weighted_duration
+    params: {}
+
+  - id: dv01
+    method: portfolio_dv01
+    params:
+      bump_bps: 1
