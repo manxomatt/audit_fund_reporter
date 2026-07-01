@@ -94,12 +94,3 @@ tests/                     five-constraint test suite
 
 See `docs/03_rfc.md` for the design rationale.
 
-## Notes & scope
-
-One-week assignment scope: happy path plus the required failure modes
-(unbindable anchor ⇒ ingestion error; untraceable figure ⇒ `ERROR`; smuggled
-narrative number ⇒ firewalled). The rule extraction is human-verified and
-shipped as YAML; the engine re-binds each rule to the live PDF at run time, so a
-tampered value or anchor is still caught. Production hardening (secrets
-management, authz, WORM audit store, reviewer UI for the extraction gate) is
-described in the RFC but not built.
